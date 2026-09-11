@@ -18,6 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
+          // first element -  Background Image
           Positioned(
             top: 0,
             left: 0,
@@ -28,6 +29,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               fit: BoxFit.cover,
             ),
           ),
+
+          // second element - Bottom Container
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -39,21 +42,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   topRight: Radius.circular(32),
                 ),
               ),
+
+              // bottom container elements
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Welcome Text
                   const Text(
                     'Get The Latest News\nAnd Updates',
                     textAlign: TextAlign.center,
                     style: AppFonts.headerLarge,
                   ),
                   const SizedBox(height: 12),
+
+                  // Description Text
                   const Text(
                     'From Politics to Entertainment: Your One-Stop Source for Comprehensive Coverage of the Latest News and Developments Across the Globe will be right on your hand.',
                     textAlign: TextAlign.center,
                     style: AppFonts.bodyRegular,
                   ),
                   const SizedBox(height: 28),
+
+                  // Explore Button
+                  // button has (appearence - onPressed - child) properties
                   SizedBox(
                     width: 150,
                     height: 46,
@@ -67,7 +78,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const SearchScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const SearchScreen()),
                         );
                       },
                       child: const Row(
@@ -75,7 +87,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         children: [
                           Text('Explore', style: AppFonts.buttonText),
                           SizedBox(width: 8),
-                          Icon(Icons.arrow_forward, size: 16, color: AppColors.white),
+                          Icon(Icons.arrow_forward,
+                              size: 16, color: AppColors.white),
                         ],
                       ),
                     ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/splash_screen/splash_screen.dart';
+import 'package:mannona_news/features/splash_screen/presentation/splash_screen.dart';
 
 void main() {
   runApp(const MannonaNewsApp());
