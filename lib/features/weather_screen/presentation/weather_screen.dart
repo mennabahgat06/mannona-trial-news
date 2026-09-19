@@ -165,7 +165,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24)),
                             ),
-                            onPressed: _fetchWeather,
+                            onPressed: _showChangeLocationDialog,
                             icon: const Icon(Icons.location_on,
                                 size: 16, color: AppColors.white),
                             label: const Text('Change Location',
@@ -177,5 +177,58 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
       ),
     );
+  }
+
+  void _showChangeLocationDialog() {
+    final controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Change Location'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(
+            hintText: 'Enter city name (e.g. Alexandria, Cairo)',
+            prefixIcon: Icon(Icons.location_city),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final city = controller.text.trim();
+              if (city.isNotEmpty) {
+                Navigator.pop(context);
+                _fetchWeatherByCity(city);
+              }
+            },
+            child: const Text('Select'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _fetchWeatherByCity(String city) async {
+    setState(() => _isLoading = true);
+    try {
+      final data = await _weatherService.getWeather(cityName: city);
+      if (mounted) {
+        setState(() {
+          _weather = data;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('City not found. Please try again.')),
+        );
+      }
+    }
   }
 }
