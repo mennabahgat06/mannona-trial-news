@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دليل مشروع تطبيق الأخبار والطقس | Mannona News</title>
+  <title>شرح كود شاشات Mannona-News سطر بسطر</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #2563EB;
@@ -17,444 +17,297 @@
       --text-dark: #0F172A;
       --text-muted: #64748B;
       --border: #E2E8F0;
-      --badge-bg: #DBEAFE;
-      --badge-text: #1E40AF;
-      --sunny: #F59E0B;
+      --code-bg: #0F172A;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Tajawal', sans-serif;
       background-color: var(--bg);
       color: var(--text-dark);
       line-height: 1.8;
-      padding: 32px 16px;
+      padding: 30px 16px;
     }
-
-    .container { max-width: 980px; margin: 0 auto; }
-
+    .container { max-width: 1040px; margin: 0 auto; }
     header {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 44px 32px;
-      border-radius: 24px;
+      color: #fff;
+      padding: 36px 24px;
+      border-radius: 20px;
       text-align: center;
-      margin-bottom: 36px;
+      margin-bottom: 24px;
       box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.25);
     }
-
-    header h1 { font-size: 30px; font-weight: 800; margin-bottom: 10px; }
-    header p { font-size: 16px; opacity: 0.95; max-width: 620px; margin: 0 auto; }
-
-    .section-card {
+    header h1 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+    header p { font-size: 14px; opacity: 0.95; }
+    .tabs-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      background: #FFFFFF;
+      padding: 10px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      margin-bottom: 22px;
+    }
+    .tab-btn {
+      flex: 1 1 auto;
+      min-width: 105px;
+      background: transparent;
+      border: 1px solid transparent;
+      outline: none;
+      padding: 9px 12px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+    .tab-btn:hover { background: var(--primary-light); color: var(--primary-dark); }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.28);
+    }
+    .tab-panel {
+      display: none;
       background: var(--card-bg);
       border-radius: 20px;
-      padding: 28px;
-      margin-bottom: 28px;
+      padding: 26px;
       border: 1px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      animation: fadeIn 0.25s ease;
     }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 20px;
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .panel-header {
       border-bottom: 2px solid var(--primary-light);
-      padding-bottom: 10px;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    .badge {
-      background: var(--badge-bg);
-      color: var(--badge-text);
-      font-size: 13px;
-      padding: 4px 12px;
-      border-radius: 999px;
-      font-weight: 600;
+    .panel-header h2 { font-size: 19px; color: var(--primary-dark); font-weight: 800; }
+    .panel-header span.path {
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      background: #F1F5F9;
+      color: #0284C7;
+      padding: 4px 10px;
+      border-radius: 8px;
+      direction: ltr;
     }
-
-    .struct-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-top: 16px;
-    }
-
-    @media (max-width: 768px) {
-      .struct-container { grid-template-columns: 1fr; }
-    }
-
-    .struct-group {
+    .breakdown-row {
       background: #F8FAFC;
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-    }
-
-    .struct-group-header {
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 12px;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--text-dark);
-      margin-bottom: 14px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
+      flex-direction: column;
     }
-
-    .file-item {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 6px 8px;
-      border-radius: 8px;
-      transition: background 0.15s;
+    @media (min-width: 768px) {
+      .breakdown-row { flex-direction: row; align-items: stretch; }
     }
-
-    .file-item:hover { background: #EDF2F7; }
-
-    .file-name {
+    .code-part {
+      flex: 1 1 52%;
+      background: var(--code-bg);
+      color: #E2E8F0;
       font-family: 'Fira Code', monospace;
-      font-size: 13px;
-      font-weight: 600;
-      color: #0369A1;
+      font-size: 12.5px;
+      padding: 14px 16px;
       direction: ltr;
       text-align: left;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      align-items: center;
+      overflow-x: auto;
     }
-
-    .folder-name {
-      color: #1D4ED8;
-      font-weight: 700;
+    @media (min-width: 768px) {
+      .code-part { border-radius: 0 12px 12px 0; }
     }
-
-    .file-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      text-align: right;
-    }
-
-    .flow-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .flow-item {
-      background: var(--bg);
+    .explain-part {
+      flex: 1 1 48%;
+      padding: 14px 18px;
+      font-size: 13.5px;
+      color: var(--text-dark);
+      background: #FFFFFF;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-      transition: transform 0.2s, border-color 0.2s;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      display: flex;
+      align-items: center;
+      line-height: 1.7;
     }
-
-    .flow-item:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
+    @media (min-width: 768px) {
+      .explain-part {
+        border-top: 1px solid var(--border);
+        border-right: none;
+        border-radius: 12px 0 0 12px;
+      }
     }
-
-    .flow-step {
-      display: inline-block;
-      width: 28px;
-      height: 28px;
-      background: var(--primary);
-      color: white;
-      border-radius: 50%;
-      font-weight: 700;
-      line-height: 28px;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-
-    .flow-item h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-    .flow-item p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
-
-    .table-container { overflow-x: auto; margin-top: 16px; }
-
-    table { width: 100%; border-collapse: collapse; text-align: right; }
-    th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
-    th { background: var(--primary-light); color: var(--primary-dark); font-weight: 700; }
-    tr:hover td { background-color: #F1F5F9; }
-
-    .tag-method {
-      display: inline-block;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 11px;
-      font-family: 'Fira Code', monospace;
-    }
-
-    .get { background: #E0F2FE; color: #0369A1; }
-
-    .feature-list {
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-    }
-
-    .feature-list li {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-    }
-
-    .feature-list li strong {
-      display: block;
-      color: var(--primary-dark);
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-
-    .feature-list li span { font-size: 12px; color: var(--text-muted); }
-
-    footer {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 13px;
-      padding: 20px 0 8px;
-    }
+    .explain-part strong { color: var(--primary-dark); margin-left: 6px; }
+    footer { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: 26px; }
   </style>
 </head>
 <body>
-
   <div class="container">
     <header>
-      <h1>دليل تطبيق الأخبار والطقس (Mannona-News)</h1>
-      <p>دليل معماري كامل يوضح تدفق الشاشات، بنية المجلدات، وتكامل NewsAPI مع OpenWeatherMap عبر Dio</p>
+      <h1>شرح كود شاشات Mannona-News سطر بسطر (شامل التحديثات)</h1>
+      <p>شرح تفصيلي لجميع شاشات الـ Figma بما فيها شاشات البداية والخريطة والرئيسية والطقس</p>
     </header>
 
-    <div class="section-card">
-      <div class="section-title">
-        <span>1. مسار حركة الشاشات وتدفق المستخدم (App Flow)</span>
-        <span class="badge">Navigation</span>
+    <div class="tabs-bar">
+      <button class="tab-btn active" onclick="showTab('welcome')">1. Welcome</button>
+      <button class="tab-btn" onclick="showTab('location')">2. Map Search</button>
+      <button class="tab-btn" onclick="showTab('home')">3. Home Feed</button>
+      <button class="tab-btn" onclick="showTab('explore')">4. Explore</button>
+      <button class="tab-btn" onclick="showTab('search')">5. Search Results</button>
+      <button class="tab-btn" onclick="showTab('article')">6. Article</button>
+      <button class="tab-btn" onclick="showTab('bookmark')">7. Bookmarks</button>
+      <button class="tab-btn" onclick="showTab('weather')">8. Weather</button>
+    </div>
+
+    <!-- TAB 1: WELCOME -->
+    <div id="welcome" class="tab-panel active">
+      <div class="panel-header">
+        <h2>شاشة الترحيب الأولى (Welcome Screen)</h2>
+        <span class="path">lib/features/welcome_screen/presentation/welcome_screen.dart</span>
       </div>
-      <div class="flow-grid">
-        <div class="flow-item">
-          <span class="flow-step">1</span>
-          <h4>Splash</h4>
-          <p>شاشة تحميل تعرض شعار التطبيق (Khaber) ثم تنتقل للغلاف الرئيسي.</p>
-        </div>
-        <div class="flow-item">
-          <span class="flow-step">2</span>
-          <h4>Explore Feed</h4>
-          <p>استعراض المقال البارز، التصنيفات، وقائمة الأخبار المسترجعة من NewsAPI.</p>
-        </div>
-        <div class="flow-item">
-          <span class="flow-step">3</span>
-          <h4>Search Results</h4>
-          <p>البحث الحي بالكلمة المفتاحية واسترجاع المقالات المطابقة فوراً.</p>
-        </div>
-        <div class="flow-item">
-          <span class="flow-step">4</span>
-          <h4>Article Detail</h4>
-          <p>قراءة المقال كاملاً مع إمكانية حفظه في المفضلة (Bookmark).</p>
-        </div>
-        <div class="flow-item">
-          <span class="flow-step">5</span>
-          <h4>Weather Tab</h4>
-          <p>عرض تفاصيل الطقس ودرجة الحرارة، سرعة الرياح، والرطوبة من OpenWeather.</p>
-        </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>Text('Get The Latest News\\nAnd Updates', style: AppFonts.headerLarge)</code></div>
+        <div class="explain-part">عنوان الشاشة الترحيبية المأخوذ مباشرة من تصميم فيجما.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>ElevatedButton(..., child: Row(children: [Text('Explore'), Icon(Icons.arrow_forward)]))</code></div>
+        <div class="explain-part">زر <strong>Explore →</strong> الأنيق ينقل المستخدم لشاشة إدخال الاسم والخريطة.</div>
       </div>
     </div>
 
-    <div class="section-card">
-      <div class="section-title">
-        <span>2. الهيكلة البرمجية المعتمدة (Feature-First)</span>
-        <span class="badge">Clean Structure</span>
+    <!-- TAB 2: LOCATION SEARCH -->
+    <div id="location" class="tab-panel">
+      <div class="panel-header">
+        <h2>شاشة الخريطة واسم المستخدم (Location Search Screen)</h2>
+        <span class="path">lib/features/location_search_screen/presentation/location_search_screen.dart</span>
       </div>
-
-      <div class="struct-container">
-        <div class="struct-group">
-          <div class="struct-group-header">
-            <span>📦 الطبقة المشتركة (Core Layer)</span>
-          </div>
-
-          <div class="file-item">
-            <span class="file-name folder-name">core/network/</span>
-            <span class="file-desc">إعدادات الاتصال بالشبكة</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">end_points.dart</span>
-            <span class="file-desc">روابط NewsAPI و OpenWeather</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">dio_factory.dart</span>
-            <span class="file-desc">تهيئة عميل Dio وضبط الـ Timeouts</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">dio_consumer.dart</span>
-            <span class="file-desc">تنفيذ طلبات الـ GET وإدارة الأخطاء</span>
-          </div>
-
-          <div class="file-item" style="margin-top: 6px;">
-            <span class="file-name folder-name">core/storage/</span>
-            <span class="file-desc">التخزين المحلي</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">bookmark_storage.dart</span>
-            <span class="file-desc">حفظ واسترجاع المفضلة عبر SharedPreferences</span>
-          </div>
-
-          <div class="file-item" style="margin-top: 6px;">
-            <span class="file-name folder-name">core/utils/</span>
-            <span class="file-desc">الثوابت العامة</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">app_colors.dart</span>
-            <span class="file-desc">ألوان الواجهة ودرجات الطقس</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">app_fonts.dart</span>
-            <span class="file-desc">أنماط ودرجات الخطوط</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">app_assets.dart</span>
-            <span class="file-desc">مسارات الصور الثابتة</span>
-          </div>
-
-          <div class="file-item" style="margin-top: 6px;">
-            <span class="file-name folder-name">core/widgets/</span>
-            <span class="file-desc">العناصر المشتركة</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">custom_txt_field.dart</span>
-            <span class="file-desc">حقل البحث الموحد</span>
-          </div>
-        </div>
-
-        <div class="struct-group">
-          <div class="struct-group-header">
-            <span>📱 طبقة الميزات (Features Layer)</span>
-          </div>
-
-          <div class="file-item">
-            <span class="file-name folder-name">features/home_screen/</span>
-            <span class="file-desc">الغلاف العام وشريط التنقل</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">home_shell_screen.dart</span>
-            <span class="file-desc">إدارة التنقل بين الصفحات عبر IndexedStack</span>
-          </div>
-
-          <div class="file-item">
-            <span class="file-name folder-name">features/explore_screen/</span>
-            <span class="file-desc">الأخبار والبحث</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">article_model.dart</span>
-            <span class="file-desc">نموذج بيانات المقال الإخباري</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">news_service.dart</span>
-            <span class="file-desc">خدمة جلب الأخبار من NewsAPI</span>
-          </div>
-
-          <div class="file-item">
-            <span class="file-name folder-name">features/weather_screen/</span>
-            <span class="file-desc">الطقس والأحوال الجوية</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">weather_model.dart</span>
-            <span class="file-desc">نموذج بيانات درجات الحرارة والرياح</span>
-          </div>
-          <div class="file-item" style="padding-right: 18px;">
-            <span class="file-name">weather_service.dart</span>
-            <span class="file-desc">خدمة الاتصال بـ OpenWeatherMap</span>
-          </div>
-
-          <div class="file-item">
-            <span class="file-name folder-name">features/bookmark_screen/</span>
-            <span class="file-desc">المقالات المحفوظة للمستخدم</span>
-          </div>
-        </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>CustomPaint(painter: _MapGridPainter())</code></div>
+        <div class="explain-part">رسم خلفية الخريطة وشبكة الإحداثيات ودبابيس الموقع المتطابقة مع التصميم.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>await BookmarkStorage.saveUserName(name);</code></div>
+        <div class="explain-part">حفظ اسم المستخدم المدخل محلياً ليظهر في التحية بشاشتي الرئيسية والطقس.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>ElevatedButton(onPressed: _onGetStarted, child: Text('Get Started'))</code></div>
+        <div class="explain-part">زر <strong>Get Started</strong> في أسفل الشاشة يدخل المستخدم للغلاف الرئيسي للتطبيق.</div>
       </div>
     </div>
 
-    <div class="section-card">
-      <div class="section-title">
-        <span>3. جدول نقاط النهاية المربوطة بالـ APIs (News & Weather)</span>
-        <span class="badge">Dio Services</span>
+    <!-- TAB 3: HOME FEED -->
+    <div id="home" class="tab-panel">
+      <div class="panel-header">
+        <h2>الشاشة الرئيسية الإخبارية (Home Screen)</h2>
+        <span class="path">lib/features/home_screen/presentation/home_screen.dart</span>
       </div>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>المجال</th>
-              <th>النوع</th>
-              <th>نقطة النهاية (Endpoint)</th>
-              <th>المعاملات (Parameters)</th>
-              <th>الخدمة البرمجية</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>أخبار عامة وبحث</td>
-              <td><span class="tag-method get">GET</span></td>
-              <td><code>/v2/everything</code></td>
-              <td><code>q, apiKey, language</code></td>
-              <td><code>NewsService.getEverything()</code></td>
-            </tr>
-            <tr>
-              <td>العناوين الرئيسية</td>
-              <td><span class="tag-method get">GET</span></td>
-              <td><code>/v2/top-headlines</code></td>
-              <td><code>country, category, apiKey</code></td>
-              <td><code>NewsService.getTopHeadlines()</code></td>
-            </tr>
-            <tr>
-              <td>الطقس الحالي</td>
-              <td><span class="tag-method get">GET</span></td>
-              <td><code>/data/2.5/weather</code></td>
-              <td><code>lat, lon, appid</code></td>
-              <td><code>WeatherService.getWeather()</code></td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="breakdown-row">
+        <div class="code-part"><code>final headlines = await _newsService.getTopHeadlines();</code></div>
+        <div class="explain-part">جلب الأخبار العاجلة والأكثر شعبية عبر نقطة <code>/v2/top-headlines</code> من NewsAPI.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>Text('Sunny ${_weather!.temp.round()}°C')</code></div>
+        <div class="explain-part">عرض بادج الطقس الحي في الزاوية العلوية بجوار تحية الصباح باسم المستخدم.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>ListView.builder(scrollDirection: Axis.horizontal, ...)</code></div>
+        <div class="explain-part">عرض قسم <strong>Most Popular</strong> في شكل بطاقات أفقية كما في تصميم فيجما تماماً.</div>
       </div>
     </div>
 
-    <div class="section-card">
-      <div class="section-title">
-        <span>4. أبرز الممارسات المطبقة في كود المشروع</span>
-        <span class="badge">Best Practices</span>
+    <!-- TAB 4: EXPLORE -->
+    <div id="explore" class="tab-panel">
+      <div class="panel-header">
+        <h2>شاشة الاستكشاف والأقسام (Explore Screen)</h2>
+        <span class="path">lib/features/explore_screen/presentation/explore_screen.dart</span>
       </div>
-
-      <ul class="feature-list">
-        <li>
-          <strong>عميل Dio موحد ومتعدد الـ BaseUrls</strong>
-          <span>دعم إرسال طلبات لأكثر من خدمة سحابية (NewsAPI و OpenWeather) باستخدام نفس البنية التحتية للشبكة.</span>
-        </li>
-        <li>
-          <strong>إدارة الحالة المحلية عبر SharedPreferences</strong>
-          <span>حفظ المقالات في المفضلة بصيغة JSON محلياً لتمكين المستخدم من العودة إليها في أي وقت.</span>
-        </li>
-        <li>
-          <strong>عزل الكلاسات والملفات (Single Responsibility)</strong>
-          <span>فصل البطاقات، الموديلات، والخدمات عن الواجهات لسهولة التطوير واختبار الكود.</span>
-        </li>
-        <li>
-          <strong>حماية الذاكرة وعمليات التنقل</strong>
-          <span>استخدام <code>dispose()</code> لإلغاء المتحكمات وفحص <code>mounted</code> قبل تحديث الـ State.</span>
-        </li>
-      </ul>
+      <div class="breakdown-row">
+        <div class="code-part"><code>final data = await _newsService.getEverything(query: query);</code></div>
+        <div class="explain-part">استدعاء الأخبار حسب التصنيف المختار (Travel, Tech, Business, Science).</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>_heroArticle = data.first; _articles = data.sublist(1);</code></div>
+        <div class="explain-part">فصل أول مقال ليكون هو المقال البارز في الأعلى مع قائمة المقالات بالأسفل.</div>
+      </div>
     </div>
 
-    <footer>
-      توثيق مشروع تطبيق Mannona-News &copy; 2026
-    </footer>
+    <!-- TAB 5: SEARCH -->
+    <div id="search" class="tab-panel">
+      <div class="panel-header">
+        <h2>شاشة نتائج البحث (Search Results Screen)</h2>
+        <span class="path">lib/features/explore_screen/presentation/search_results_screen.dart</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>void _performSearch(String query) async { ... }</code></div>
+        <div class="explain-part">إرسال استعلام البحث الحي للـ API وعرض الأخبار المطابقة للكلمة المفتاحية.</div>
+      </div>
+    </div>
+
+    <!-- TAB 6: ARTICLE -->
+    <div id="article" class="tab-panel">
+      <div class="panel-header">
+        <h2>شاشة تفاصيل المقال (Article Detail Screen)</h2>
+        <span class="path">lib/features/article_screen/presentation/article_detail_screen.dart</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>await BookmarkStorage.toggleBookmark(widget.article);</code></div>
+        <div class="explain-part">حفظ أو إلغاء حفظ المقال في المفضلة المحلية بضغطة زر وتحديث لون الأيقونة.</div>
+      </div>
+    </div>
+
+    <!-- TAB 7: BOOKMARK -->
+    <div id="bookmark" class="tab-panel">
+      <div class="panel-header">
+        <h2>شاشة المفضلة وتأكيد الحذف (Bookmark Screen)</h2>
+        <span class="path">lib/features/bookmark_screen/presentation/bookmark_screen.dart</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>onLongPress: () => _showDeleteDialog(article)</code></div>
+        <div class="explain-part">الضغط المطول يفتح نافذة <strong>DeleteBookmarkDialog</strong> لاختيار (Yes, Delete) أو (No).</div>
+      </div>
+    </div>
+
+    <!-- TAB 8: WEATHER -->
+    <div id="weather" class="tab-panel">
+      <div class="panel-header">
+        <h2>شاشة الطقس وتغيير الموقع (Weather Screen)</h2>
+        <span class="path">lib/features/weather_screen/presentation/weather_screen.dart</span>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>void _showChangeLocationDialog() { ... }</code></div>
+        <div class="explain-part">نافذة اختيار المكان: تتيح كتابة اسم أي مدينة وتحديث الطقس فوراً من OpenWeatherMap.</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="code-part"><code>WeatherInfoBox(icon: Icons.air, value: '${_weather!.windSpeed} mp/h')</code></div>
+        <div class="explain-part">عرض إحصائيات الرياح، الضغط الجوي، الرطوبة، والفهرنهايت في شبكة مربعات منظمة.</div>
+      </div>
+    </div>
+
+    <footer>توثيق مشروع تطبيق Mannona-News المحدّث &copy; 2026</footer>
   </div>
 
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
 </body>
 </html>

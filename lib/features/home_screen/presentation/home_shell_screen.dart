@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/home_screen/home_screen.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../explore_screen/presentation/explore_screen.dart';
 import '../../bookmark_screen/presentation/bookmark_screen.dart';
@@ -16,10 +17,10 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = const [
-    ExploreScreen(),     // Tab 0: Home / Feed
-    ExploreScreen(),     // Tab 1: Explore & Search
-    BookmarkScreen(),    // Tab 2: Bookmarks
-    WeatherScreen(),     // Tab 3: Weather (Cairo - EG)
+    HomeScreen(), // Tab 0: Home Feed الجديد
+    ExploreScreen(), // Tab 1: Explore
+    BookmarkScreen(), // Tab 2: Bookmark
+    WeatherScreen(), // Tab 3: Weather
   ];
 
   @override
