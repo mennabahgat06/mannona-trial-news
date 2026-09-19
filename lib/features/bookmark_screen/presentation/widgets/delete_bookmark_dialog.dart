@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_fonts.dart';
-import '../../../home_screen/data/models/news_article_model.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/utils/app_fonts.dart';
+import '../../../explore_screen/data/models/article_model.dart';
 
 class DeleteBookmarkDialog extends StatelessWidget {
-  final NewsArticleModel article;
+  final ArticleModel article;
   final VoidCallback onConfirm;
 
   const DeleteBookmarkDialog({
@@ -47,7 +47,15 @@ class DeleteBookmarkDialog extends StatelessWidget {
                   const SizedBox(width: 8),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(article.imagePath, width: 50, height: 40, fit: BoxFit.cover),
+                    child: article.urlToImage != null
+                        ? Image.network(
+                            article.urlToImage!,
+                            width: 50,
+                            height: 40,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(width: 50, height: 40, color: Colors.grey[200]),
+                          )
+                        : Container(width: 50, height: 40, color: Colors.grey[200]),
                   ),
                 ],
               ),

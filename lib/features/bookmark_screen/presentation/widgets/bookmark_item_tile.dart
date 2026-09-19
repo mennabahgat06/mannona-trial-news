@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/explore_screen/data/models/article_model.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../home_screen/data/models/news_article_model.dart';
 
 class BookmarkItemTile extends StatelessWidget {
-  final NewsArticleModel article;
+  final ArticleModel article;
   final VoidCallback onTap;
   final VoidCallback onLongPress;
 
@@ -40,8 +40,9 @@ class BookmarkItemTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    article.category,
-                    style: const TextStyle(fontSize: 11, color: AppColors.textLightGrey),
+                    article.category!,
+                    style: const TextStyle(
+                        fontSize: 11, color: AppColors.textLightGrey),
                   ),
                 ],
               ),
@@ -50,7 +51,7 @@ class BookmarkItemTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
-                article.imagePath,
+                article.imagePath!,
                 width: 70,
                 height: 56,
                 fit: BoxFit.cover,

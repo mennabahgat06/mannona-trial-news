@@ -1,5 +1,5 @@
 name: mannona_news
-description: "Mannona News Flutter Application"
+description: "Mannona News & Weather Application"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
+  dio: ^5.4.1
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

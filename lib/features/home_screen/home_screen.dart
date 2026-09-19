@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/explore_screen/data/models/article_model.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_fonts.dart';
 import '../article_screen/article_detail_screen.dart';
 import '../bookmark_screen/bookmark_screen.dart';
-import 'data/models/news_article_model.dart';
 import 'presentation/widgets/custom_bottom_nav_bar.dart';
 import 'presentation/widgets/featured_news_card.dart';
 import 'presentation/widgets/popular_news_card.dart';
@@ -19,8 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _navIndex = 0;
 
-  final List<NewsArticleModel> _popularNews = [
-    NewsArticleModel(
+  final List<ArticleModel> _popularNews = [
+    ArticleModel(
       id: '1',
       title: 'The Pros and Cons of Remote Work',
       category: 'Technology',
@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       content:
           'Forests are one of the most important natural resources that our planet possesses. Not only do they provide us with a diverse range of products such as timber, medicine, and food, but they also play a vital role in mitigating climate change.',
     ),
-    NewsArticleModel(
+    ArticleModel(
       id: '2',
       title: 'Exploring Nature and Forests',
       category: 'Environment',
@@ -58,14 +58,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Good Morning,\nAhmed Saber', style: AppFonts.caption.copyWith(color: AppColors.textGrey)),
+                      Text('Good Morning,\nAhmed Saber',
+                          style: AppFonts.caption
+                              .copyWith(color: AppColors.textGrey)),
                       const SizedBox(height: 2),
-                      const Text('Sun 9 April, 2023', style: AppFonts.titleMedium),
+                      const Text('Sun 9 April, 2023',
+                          style: AppFonts.titleMedium),
                     ],
                   ),
                   const Row(
                     children: [
-                      Icon(Icons.wb_sunny_outlined, size: 18, color: Colors.orange),
+                      Icon(Icons.wb_sunny_outlined,
+                          size: 18, color: Colors.orange),
                       SizedBox(width: 4),
                       Text('Sunny 32°C', style: AppFonts.caption),
                     ],
@@ -78,7 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ArticleDetailScreen(article: _popularNews.first),
+                      builder: (context) =>
+                          ArticleDetailScreen(article: _popularNews.first),
                     ),
                   );
                 },
@@ -90,7 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Text('Most Popular', style: AppFonts.titleMedium),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('See More', style: TextStyle(fontSize: 12, color: AppColors.primaryBlue)),
+                    child: const Text('See More',
+                        style: TextStyle(
+                            fontSize: 12, color: AppColors.primaryBlue)),
                   ),
                 ],
               ),
@@ -108,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ArticleDetailScreen(article: article),
+                            builder: (context) =>
+                                ArticleDetailScreen(article: article),
                           ),
                         );
                       },

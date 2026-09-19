@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/explore_screen/data/models/article_model.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_fonts.dart';
-import '../home_screen/data/models/news_article_model.dart';
 
 class ArticleDetailScreen extends StatefulWidget {
-  final NewsArticleModel article;
+  final ArticleModel article;
 
   const ArticleDetailScreen({super.key, required this.article});
 
@@ -58,11 +58,16 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                           children: [
                             IconButton(
                               icon: Icon(
-                                _isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                                _isBookmarked
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
                                 size: 20,
-                                color: _isBookmarked ? AppColors.primaryBlue : AppColors.textDark,
+                                color: _isBookmarked
+                                    ? AppColors.primaryBlue
+                                    : AppColors.textDark,
                               ),
-                              onPressed: () => setState(() => _isBookmarked = !_isBookmarked),
+                              onPressed: () => setState(
+                                  () => _isBookmarked = !_isBookmarked),
                             ),
                             IconButton(
                               icon: const Icon(Icons.share_outlined, size: 20),
@@ -78,13 +83,13 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                       style: AppFonts.headerLarge,
                     ),
                     const SizedBox(height: 12),
-                    Row(
+                    const Row(
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 12,
                           backgroundImage: AssetImage(AppAssets.avatar),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(
                           '\${widget.article.author} · \${widget.article.date}',
                           style: AppFonts.caption,
@@ -93,13 +98,15 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      widget.article.content,
-                      style: AppFonts.bodyRegular.copyWith(color: AppColors.textDark),
+                      widget.article.content!,
+                      style: AppFonts.bodyRegular
+                          .copyWith(color: AppColors.textDark),
                     ),
                     const SizedBox(height: 14),
                     Text(
                       'One of the most important roles that forests play is in absorbing carbon dioxide from the atmosphere. Trees absorb carbon dioxide through photosynthesis and store it in their trunks, branches, and leaves.',
-                      style: AppFonts.bodyRegular.copyWith(color: AppColors.textDark),
+                      style: AppFonts.bodyRegular
+                          .copyWith(color: AppColors.textDark),
                     ),
                   ],
                 ),

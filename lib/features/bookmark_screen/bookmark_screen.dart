@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/explore_screen/data/models/article_model.dart';
 import '../../core/constants/app_assets.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_fonts.dart';
 import '../article_screen/article_detail_screen.dart';
-import '../home_screen/data/models/news_article_model.dart';
 import 'presentation/widgets/bookmark_item_tile.dart';
 import 'presentation/widgets/delete_bookmark_dialog.dart';
 
@@ -15,8 +15,8 @@ class BookmarkScreen extends StatefulWidget {
 }
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
-  final List<NewsArticleModel> _bookmarks = [
-    NewsArticleModel(
+  final List<ArticleModel> _bookmarks = [
+    ArticleModel(
       id: '1',
       title: 'How to Setup Your Workspace',
       category: 'Interior',
@@ -25,7 +25,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       imagePath: AppAssets.newsRemote,
       content: 'Sample content about workspace setup.',
     ),
-    NewsArticleModel(
+    ArticleModel(
       id: '2',
       title: 'Discovering Hidden Gems: 8 Off-The-Beaten-Path...',
       category: 'Travel',
@@ -34,7 +34,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       imagePath: AppAssets.featuredJapan,
       content: 'Explore untouched places around the world.',
     ),
-    NewsArticleModel(
+    ArticleModel(
       id: '3',
       title: 'Exploring the World\'s Best Beaches: Top 5 Picks',
       category: 'Travel',
@@ -45,7 +45,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
     ),
   ];
 
-  void _showDeleteDialog(NewsArticleModel article) {
+  void _showDeleteDialog(ArticleModel article) {
     showDialog(
       context: context,
       builder: (context) => DeleteBookmarkDialog(
@@ -68,7 +68,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, size: 18, color: AppColors.textDark),
+          icon: const Icon(Icons.arrow_back_ios_new,
+              size: 18, color: AppColors.textDark),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text('Bookmark', style: AppFonts.titleMedium),

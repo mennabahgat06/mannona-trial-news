@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mannona_news/features/splash_screen/presentation/splash_screen.dart';
+import 'features/splash_screen/presentation/splash_screen.dart';
 
 void main() {
   runApp(const MannonaNewsApp());
@@ -14,7 +14,6 @@ class MannonaNewsApp extends StatelessWidget {
       title: 'Mannona-News',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
         fontFamily: 'Poppins',
         useMaterial3: true,
       ),

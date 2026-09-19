@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/explore_screen/data/models/article_model.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../data/models/news_article_model.dart';
 
 class PopularNewsCard extends StatelessWidget {
-  final NewsArticleModel article;
+  final ArticleModel article;
   final VoidCallback onTap;
 
   const PopularNewsCard({
@@ -25,7 +25,7 @@ class PopularNewsCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                article.imagePath,
+                article.imagePath!,
                 height: 130,
                 width: 170,
                 fit: BoxFit.cover,
@@ -44,8 +44,9 @@ class PopularNewsCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              article.category,
-              style: const TextStyle(fontSize: 11, color: AppColors.textLightGrey),
+              article.category!,
+              style:
+                  const TextStyle(fontSize: 11, color: AppColors.textLightGrey),
             ),
           ],
         ),
