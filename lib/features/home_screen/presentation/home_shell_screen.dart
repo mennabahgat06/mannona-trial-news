@@ -28,7 +28,7 @@ class _HomeShellScreenState extends State<HomeShellScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: IndexedStack(
-        index: _currentIndex,
+        index: 0,
         children: _screens,
       ),
       bottomNavigationBar: CustomBottomNavBar(

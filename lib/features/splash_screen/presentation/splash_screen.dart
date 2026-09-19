@@ -19,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          // الانتقال لشاشة الترحيب بدلاً من HomeShellScreen
           MaterialPageRoute(builder: (context) => const WelcomeScreen()),
         );
       }

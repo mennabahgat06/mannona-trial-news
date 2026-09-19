@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mannona_news/features/_screen/location_screen.dart';
+import 'package:mannona_news/features/location_screen/location_screen.dart';
 import '../../../../core/utils/app_colors.dart';
 
 class WelcomeScreen extends StatelessWidget {
