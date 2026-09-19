@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mannona_news/features/welcome_screen/welcome_screen.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_fonts.dart';
-import '../../home_screen/presentation/home_shell_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeShellScreen()),
+          // الانتقال لشاشة الترحيب بدلاً من HomeShellScreen
+          MaterialPageRoute(builder: (context) => const WelcomeScreen()),
         );
       }
     });
