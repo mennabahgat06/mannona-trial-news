@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mannona_news/features/article_screen/article_detail_screen.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_fonts.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_fonts.dart';
+import '../../../core/widgets/custom_txt_field.dart';
+import '../../../core/widgets/error_view.dart';
+import '../../../core/widgets/loading_view.dart';
+import '../../article_screen/presentation/article_detail_screen.dart';
 import '../data/models/article_model.dart';
 import '../data/services/news_service.dart';
 import 'widgets/explore_news_item.dart';
 
+/// Search results (GET /v2/everything?q=...). Type again and press search.
 class SearchResultsScreen extends StatefulWidget {
   final String initialQuery;
 
@@ -17,15 +21,17 @@ class SearchResultsScreen extends StatefulWidget {
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
   final NewsService _newsService = NewsService();
-  late TextEditingController _searchController;
+  late final TextEditingController _searchController =
+      TextEditingController(text: widget.initialQuery);
+
   List<ArticleModel> _results = [];
   bool _isLoading = false;
+  String? _error;
 
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController(text: widget.initialQuery);
-    _performSearch(widget.initialQuery);
+    _search();
   }
 
   @override
@@ -34,15 +40,21 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
     super.dispose();
   }
 
-  Future<void> _performSearch(String query) async {
-    if (query.trim().isEmpty) return;
-    setState(() => _isLoading = true);
-    final data = await _newsService.getEverything(query: query.trim());
-    if (mounted) {
-      setState(() {
-        _results = data;
-        _isLoading = false;
-      });
+  Future<void> _search() async {
+    final query = _searchController.text.trim();
+    if (query.isEmpty) return;
+
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    try {
+      final data = await _newsService.getEverything(query: query);
+      if (mounted) setState(() => _results = data);
+    } catch (e) {
+      if (mounted) setState(() => _error = e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -53,72 +65,48 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,
-              size: 18, color: AppColors.textDark),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('Search results', style: AppFonts.titleMedium),
         centerTitle: true,
+        title: const Text('Search results', style: AppFonts.titleMedium),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.cardFill,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: TextField(
-                controller: _searchController,
-                onSubmitted: _performSearch,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: const Icon(Icons.search,
-                      color: AppColors.textGrey, size: 20),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.close,
-                        size: 18, color: AppColors.textGrey),
-                    onPressed: () => _searchController.clear(),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-              ),
+            CustomTextField(
+              controller: _searchController,
+              hintText: 'Search news...',
+              prefixIcon: Icons.search,
+              onSubmitted: (_) => _search(),
             ),
             const SizedBox(height: 16),
-            Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                          color: AppColors.primaryBlue))
-                  : _results.isEmpty
-                      ? const Center(
-                          child: Text('No results found.',
-                              style: AppFonts.bodyRegular))
-                      : ListView.builder(
-                          itemCount: _results.length,
-                          itemBuilder: (context, index) {
-                            final art = _results[index];
-                            return ExploreNewsItem(
-                              article: art,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        ArticleDetailScreen(article: art),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-            ),
+            Expanded(child: _buildBody()),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBody() {
+    if (_isLoading) return const LoadingView();
+    if (_error != null) return ErrorView(message: _error!, onRetry: _search);
+    if (_results.isEmpty) {
+      return const Center(
+          child: Text('No results found.', style: AppFonts.bodyRegular));
+    }
+
+    return ListView.builder(
+      itemCount: _results.length,
+      itemBuilder: (context, index) {
+        final article = _results[index];
+        return ExploreNewsItem(
+          article: article,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => ArticleDetailScreen(article: article)),
+          ),
+        );
+      },
     );
   }
 }

@@ -26,6 +26,13 @@ class AppFonts {
     color: AppColors.textDark,
   );
 
+  static const TextStyle titleSmall = TextStyle(
+    fontFamily: fontFamily,
+    fontSize: 13,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textDark,
+  );
+
   static const TextStyle bodyRegular = TextStyle(
     fontFamily: fontFamily,
     fontSize: 13,

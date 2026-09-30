@@ -1,56 +1,62 @@
 import 'package:flutter/material.dart';
-import '../../../../core/constants/app_assets.dart';
-import '../../../../core/constants/app_colors.dart';
+import '../../../../core/utils/app_colors.dart';
+import '../../../../core/widgets/app_network_image.dart';
+import '../../../explore_screen/data/models/article_model.dart';
 
+/// Big image card with a dark gradient and the title on top.
 class FeaturedNewsCard extends StatelessWidget {
+  final ArticleModel article;
   final VoidCallback onTap;
 
-  const FeaturedNewsCard({super.key, required this.onTap});
+  const FeaturedNewsCard({super.key, required this.article, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: 180,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          image: const DecorationImage(
-            image: AssetImage(AppAssets.featuredJapan),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.transparent, Colors.black.withValues(alpha: 0.8)],
-            ),
-          ),
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.bottomLeft,
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(
-                  'Experience the Serenity of\nJapan\'s Traditional Countryside',
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            AppNetworkImage(
+                url: article.urlToImage, height: 220, width: double.infinity),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.8),
+                    ],
                   ),
                 ),
               ),
-              Text(
-                'Live Today',
-                style: TextStyle(color: Colors.white70, fontSize: 11),
+            ),
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    article.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        color: AppColors.white, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    article.writer,
+                    style: const TextStyle(color: Colors.white70, fontSize: 11),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

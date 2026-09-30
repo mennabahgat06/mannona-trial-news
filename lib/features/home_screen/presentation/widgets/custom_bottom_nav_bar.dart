@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/app_colors.dart';
+import 'nav_bar_item.dart';
 
+/// Dark rounded bottom bar with 4 tabs.
 class CustomBottomNavBar extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onItemTapped;
+  final ValueChanged<int> onItemTapped;
 
   const CustomBottomNavBar({
     super.key,
@@ -23,38 +25,31 @@ class CustomBottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(icon: Icons.home_filled, label: 'Home', index: 0),
-          _buildNavItem(icon: Icons.explore_outlined, label: 'Explore', index: 1),
-          _buildNavItem(icon: Icons.bookmark_border_rounded, label: 'Bookmark', index: 2),
-          _buildNavItem(icon: Icons.cloud_outlined, label: 'Weather', index: 3),
+          NavBarItem(
+            icon: Icons.home_filled,
+            label: 'Home',
+            isActive: selectedIndex == 0,
+            onTap: () => onItemTapped(0),
+          ),
+          NavBarItem(
+            icon: Icons.explore_outlined,
+            label: 'Explore',
+            isActive: selectedIndex == 1,
+            onTap: () => onItemTapped(1),
+          ),
+          NavBarItem(
+            icon: Icons.bookmark_border_rounded,
+            label: 'Bookmark',
+            isActive: selectedIndex == 2,
+            onTap: () => onItemTapped(2),
+          ),
+          NavBarItem(
+            icon: Icons.cloud_outlined,
+            label: 'Weather',
+            isActive: selectedIndex == 3,
+            onTap: () => onItemTapped(3),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem({required IconData icon, required String label, required int index}) {
-    final bool isActive = selectedIndex == index;
-    return GestureDetector(
-      onTap: () => onItemTapped(index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive ? Colors.white24 : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, size: 18, color: isActive ? AppColors.white : AppColors.textLightGrey),
-            if (isActive) ...[
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.white),
-              ),
-            ],
-          ],
-        ),
       ),
     );
   }

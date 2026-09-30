@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_fonts.dart';
-import '../../../../core/storage/bookmark_storage.dart';
+import 'package:flutter/services.dart';
+import '../../../core/storage/bookmark_storage.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../../core/utils/app_fonts.dart';
+import '../../../core/utils/date_helper.dart';
+import '../../../core/widgets/app_network_image.dart';
 import '../../explore_screen/data/models/article_model.dart';
+import 'widgets/article_action_bar.dart';
 
+/// Article details: image on top, white sheet with title, author and text.
 class ArticleDetailScreen extends StatefulWidget {
   final ArticleModel article;
 
@@ -16,27 +21,38 @@ class ArticleDetailScreen extends StatefulWidget {
 class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
   bool _isBookmarked = false;
 
+  ArticleModel get _article => widget.article;
+
   @override
   void initState() {
     super.initState();
-    _checkBookmarkStatus();
-  }
-
-  Future<void> _checkBookmarkStatus() async {
-    final status = await BookmarkStorage.isBookmarked(widget.article.title);
-    if (mounted) setState(() => _isBookmarked = status);
+    BookmarkStorage.isBookmarked(_article).then((saved) {
+      if (mounted) setState(() => _isBookmarked = saved);
+    });
   }
 
   Future<void> _toggleBookmark() async {
-    await BookmarkStorage.toggleBookmark(widget.article);
-    setState(() => _isBookmarked = !_isBookmarked);
+    final saved = await BookmarkStorage.toggleBookmark(_article);
+    if (!mounted) return;
+    setState(() => _isBookmarked = saved);
+    _showMessage(saved ? 'Article bookmarked!' : 'Removed from bookmarks');
+  }
+
+  /// Copies the article link so the user can paste it anywhere.
+  Future<void> _share() async {
+    final link = _article.url;
+    if (link == null || link.isEmpty) {
+      _showMessage('This article has no link to share.');
+      return;
+    }
+    await Clipboard.setData(ClipboardData(text: link));
+    _showMessage('Link copied to clipboard');
+  }
+
+  void _showMessage(String text) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-            _isBookmarked ? 'Article bookmarked!' : 'Removed from bookmarks'),
-        duration: const Duration(seconds: 1),
-      ),
+      SnackBar(content: Text(text), duration: const Duration(seconds: 1)),
     );
   }
 
@@ -51,18 +67,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
             left: 0,
             right: 0,
             height: 320,
-            child: widget.article.urlToImage != null &&
-                    widget.article.urlToImage!.isNotEmpty
-                ? Image.network(
-                    widget.article.urlToImage!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      color: AppColors.cardFill,
-                      child: const Icon(Icons.image,
-                          size: 50, color: AppColors.textLightGrey),
-                    ),
-                  )
-                : Container(color: AppColors.cardFill),
+            child: AppNetworkImage(url: _article.urlToImage),
           ),
           Positioned.fill(
             top: 270,
@@ -79,50 +84,27 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back, size: 20),
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                _isBookmarked
-                                    ? Icons.bookmark
-                                    : Icons.bookmark_border,
-                                size: 22,
-                                color: _isBookmarked
-                                    ? AppColors.primaryBlue
-                                    : AppColors.textDark,
-                              ),
-                              onPressed: _toggleBookmark,
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.share_outlined, size: 20),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ],
+                    ArticleActionBar(
+                      isBookmarked: _isBookmarked,
+                      onBack: () => Navigator.pop(context),
+                      onBookmark: _toggleBookmark,
+                      onShare: _share,
                     ),
                     const SizedBox(height: 12),
-                    Text(widget.article.title, style: AppFonts.headerLarge),
+                    Text(_article.title, style: AppFonts.headerLarge),
                     const SizedBox(height: 10),
-                    const Row(
+                    Row(
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           radius: 12,
                           backgroundColor: AppColors.cardFill,
                           child: Icon(Icons.person,
                               size: 14, color: AppColors.textGrey),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            '\${widget.article.author ?? "Unknown Author"} · \${widget.article.publishedAt ?? "Recent"}',
+                            '${_article.writer} · ${DateHelper.formatApiDate(_article.publishedAt)}',
                             style: AppFonts.caption,
                           ),
                         ),
@@ -130,10 +112,7 @@ class _ArticleDetailScreenState extends State<ArticleDetailScreen> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      widget.article.content?.isNotEmpty == true
-                          ? widget.article.content!
-                          : widget.article.description ??
-                              'No content available.',
+                      _article.body,
                       style: AppFonts.bodyRegular
                           .copyWith(color: AppColors.textDark, fontSize: 14),
                     ),

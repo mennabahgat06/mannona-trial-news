@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/app_colors.dart';
 
+/// Icon + value + small title (one cell of the stats grid).
 class WeatherInfoBox extends StatelessWidget {
   final IconData icon;
   final String value;
@@ -22,8 +23,14 @@ class WeatherInfoBox extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textDark)),
-            Text(title, style: const TextStyle(fontSize: 11, color: AppColors.textLightGrey)),
+            Text(value,
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textDark)),
+            Text(title,
+                style: const TextStyle(
+                    fontSize: 11, color: AppColors.textLightGrey)),
           ],
         ),
       ],

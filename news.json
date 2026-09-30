@@ -1,0 +1,176 @@
+{
+  
+  "info": {
+    "_postman_id": "f899734b-6310-4aba-bd3a-001cd2e7989b",
+    "name": "news",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26797709"
+  },
+
+
+  "item": [
+   
+    {
+      "name": "weather",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.openweathermap.org/data/2.5/weather?lat=30.5877893&lon=31.4798788&appid=39ef56aa87e0f9d833e66cd9111de959",
+          "protocol": "https",
+          "host": [
+            "api",
+            "openweathermap",
+            "org"
+          ],
+          "path": [
+            "data",
+            "2.5",
+            "weather"
+          ],
+          "query": [
+            {
+              "key": "lat",
+              "value": "30.5877893"
+            },
+            {
+              "key": "lon",
+              "value": "31.4798788"
+            },
+            {
+              "key": "appid",
+              "value": "39ef56aa87e0f9d833e66cd9111de959"
+            },
+            {
+              "key": "units",
+              "value": "metric",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+
+
+    {
+      "name": "everything",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://newsapi.org/v2/everything?q=a&apiKey=836086f05b344448a16dd41ee51c6320&language=en",
+          "protocol": "https",
+          "host": [
+            "newsapi",
+            "org"
+          ],
+          "path": [
+            "v2",
+            "everything"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "a"
+            },
+            {
+              "key": "apiKey",
+              "value": "836086f05b344448a16dd41ee51c6320"
+            },
+            {
+              "key": "from",
+              "value": "2026-02-01",
+              "disabled": true
+            },
+            {
+              "key": "to",
+              "value": "2025-08-05",
+              "disabled": true
+            },
+            {
+              "key": "language",
+              "value": "en"
+            },
+            {
+              "key": "sortBy",
+              "value": "popularity",
+              "disabled": true
+            },
+            {
+              "key": "pageSize",
+              "value": "1",
+              "disabled": true
+            },
+            {
+              "key": "page",
+              "value": "2",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+
+
+    {
+      "name": "top-headlines",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://newsapi.org/v2/top-headlines",
+          "protocol": "https",
+          "host": [
+            "newsapi",
+            "org"
+          ],
+          "path": [
+            "v2",
+            "top-headlines"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "we",
+              "disabled": true
+            },
+            {
+              "key": "apiKey",
+              "value": "836086f05b344448a16dd41ee51c6320",
+              "disabled": true
+            },
+            {
+              "key": "category",
+              "value": "science",
+              "disabled": true
+            },
+            {
+              "key": "country",
+              "value": "us",
+              "disabled": true
+            },
+            {
+              "key": "pageSize",
+              "value": "2",
+              "disabled": true
+            },
+            {
+              "key": "page",
+              "value": "1",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+
+
+    
+  ]
+
+
+
+}

@@ -3,63 +3,50 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/explore_screen/data/models/article_model.dart';
 
+/// Saves bookmarked articles on the device.
 class BookmarkStorage {
   static const String _key = 'saved_bookmarks';
-  static const String _userKey = 'saved_user_name';
 
-  // Notifier عام لتحديث واجهة البوك مارك فوراً في أي شاشة
-  static final ValueNotifier<int> bookmarkUpdateNotifier =
-      ValueNotifier<int>(0);
+  /// Increases every time bookmarks change, so any screen can refresh itself.
+  static final ValueNotifier<int> bookmarkUpdateNotifier = ValueNotifier<int>(0);
 
   static Future<List<ArticleModel>> getBookmarks() async {
     final prefs = await SharedPreferences.getInstance();
     final data = prefs.getStringList(_key) ?? [];
-    return data.map((item) => ArticleModel.fromJson(jsonDecode(item))).toList();
+    return data
+        .map((item) => ArticleModel.fromJson(jsonDecode(item)))
+        .toList();
   }
 
-  static Future<bool> toggleBookmark(ArticleModel article) async {
-    final prefs = await SharedPreferences.getInstance();
+  static Future<bool> isBookmarked(ArticleModel article) async {
     final list = await getBookmarks();
-    final index = list.indexWhere((item) => item.title == article.title);
+    return list.any((item) => item.key == article.key);
+  }
 
-    bool isNowBookmarked = false;
+  /// Adds the article if missing, removes it if saved. Returns the new state.
+  static Future<bool> toggleBookmark(ArticleModel article) async {
+    final list = await getBookmarks();
+    final index = list.indexWhere((item) => item.key == article.key);
+
     if (index >= 0) {
       list.removeAt(index);
-      isNowBookmarked = false;
     } else {
-      list.add(article);
-      isNowBookmarked = true;
+      list.insert(0, article);
     }
-
-    final encoded = list.map((item) => jsonEncode(item.toJson())).toList();
-    await prefs.setStringList(_key, encoded);
-
-    // إشعار جميع الشاشات بالتحديث
-    bookmarkUpdateNotifier.value++;
-    return isNowBookmarked;
+    await _save(list);
+    return index < 0;
   }
 
-  static Future<bool> isBookmarked(String title) async {
+  static Future<void> removeBookmark(ArticleModel article) async {
     final list = await getBookmarks();
-    return list.any((item) => item.title == title);
+    list.removeWhere((item) => item.key == article.key);
+    await _save(list);
   }
 
-  static Future<void> removeBookmark(String title) async {
+  static Future<void> _save(List<ArticleModel> list) async {
     final prefs = await SharedPreferences.getInstance();
-    final list = await getBookmarks();
-    list.removeWhere((item) => item.title == title);
     final encoded = list.map((item) => jsonEncode(item.toJson())).toList();
     await prefs.setStringList(_key, encoded);
     bookmarkUpdateNotifier.value++;
-  }
-
-  static Future<void> saveUserName(String name) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_userKey, name);
-  }
-
-  static Future<String> getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_userKey) ?? 'Ahmed Saber';
   }
 }

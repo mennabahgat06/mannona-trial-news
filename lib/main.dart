@@ -13,10 +13,7 @@ class MannonaNewsApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mannona-News',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        useMaterial3: true,
-      ),
+      theme: ThemeData(fontFamily: 'Poppins', useMaterial3: true),
       home: const SplashScreen(),
     );
   }

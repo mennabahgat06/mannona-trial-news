@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/app_colors.dart';
 import '../../../../core/utils/app_fonts.dart';
+import '../../../../core/widgets/app_network_image.dart';
 import '../../../explore_screen/data/models/article_model.dart';
 
+/// "Sure you want to delete this item?" with Yes / No buttons.
 class DeleteBookmarkDialog extends StatelessWidget {
   final ArticleModel article;
   final VoidCallback onConfirm;
@@ -18,12 +20,12 @@ class DeleteBookmarkDialog extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              'Sure You want to delete this item?',
+              'Sure you want to delete this item?',
               style: AppFonts.titleMedium,
               textAlign: TextAlign.center,
             ),
@@ -41,22 +43,13 @@ class DeleteBookmarkDialog extends StatelessWidget {
                       article.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: article.urlToImage != null
-                        ? Image.network(
-                            article.urlToImage!,
-                            width: 50,
-                            height: 40,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(width: 50, height: 40, color: Colors.grey[200]),
-                          )
-                        : Container(width: 50, height: 40, color: Colors.grey[200]),
-                  ),
+                  AppNetworkImage(
+                      url: article.urlToImage, width: 50, height: 40, radius: 8),
                 ],
               ),
             ),
@@ -67,13 +60,15 @@ class DeleteBookmarkDialog extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryBlue,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18)),
                     ),
                     onPressed: () {
                       Navigator.pop(context);
                       onConfirm();
                     },
-                    child: const Text('Yes, Delete', style: TextStyle(fontSize: 12, color: AppColors.white)),
+                    child: const Text('Yes, Delete',
+                        style: TextStyle(fontSize: 12, color: AppColors.white)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -81,10 +76,13 @@ class DeleteBookmarkDialog extends StatelessWidget {
                   child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: AppColors.border),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18)),
                     ),
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('No', style: TextStyle(fontSize: 12, color: AppColors.textDark)),
+                    child: const Text('No',
+                        style:
+                            TextStyle(fontSize: 12, color: AppColors.textDark)),
                   ),
                 ),
               ],
