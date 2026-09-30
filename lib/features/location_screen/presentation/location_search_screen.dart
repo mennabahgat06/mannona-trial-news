@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../../core/utils/app_colors.dart';
-import '../../../../core/utils/app_fonts.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import '../../../core/storage/user_storage.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../../core/widgets/primary_button.dart';
 import '../../home_screen/presentation/home_shell_screen.dart';
+import 'widgets/location_map.dart';
+import 'widgets/name_input_bar.dart';
 
+/// Screen 3: user types a name and taps the map to pick a location.
+/// Both are saved and used later by Home + Weather.
 class LocationSearchScreen extends StatefulWidget {
   const LocationSearchScreen({super.key});
 
@@ -11,7 +18,11 @@ class LocationSearchScreen extends StatefulWidget {
 }
 
 class _LocationSearchScreenState extends State<LocationSearchScreen> {
-  final TextEditingController _nameController = TextEditingController(text: 'Ahmed Saber');
+  final TextEditingController _nameController = TextEditingController();
+  final MapController _mapController = MapController();
+
+  LatLng _selectedPoint =
+      const LatLng(UserStorage.defaultLat, UserStorage.defaultLon);
 
   @override
   void dispose() {
@@ -19,48 +30,59 @@ class _LocationSearchScreenState extends State<LocationSearchScreen> {
     super.dispose();
   }
 
+  Future<void> _onGetStarted() async {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your name first.')),
+      );
+      return;
+    }
+
+    await UserStorage.saveUserName(name);
+    await UserStorage.saveLocation(
+        _selectedPoint.latitude, _selectedPoint.longitude);
+    if (!mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const HomeShellScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF3F4F6),
+      backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          const Center(child: Icon(Icons.map_outlined, size: 180, color: Colors.black12)),
-          const Positioned(top: 280, left: 120, child: Icon(Icons.location_on, size: 40, color: AppColors.primaryBlue)),
+          LocationMap(
+            controller: _mapController,
+            selectedPoint: _selectedPoint,
+            onPointSelected: (point) => setState(() => _selectedPoint = point),
+          ),
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
-                ),
-                child: TextField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    prefixIcon: Icon(Icons.person_outline, color: AppColors.textGrey),
-                    hintText: 'Enter your name...',
-                  ),
-                ),
-              ),
+              child: NameInputBar(controller: _nameController),
             ),
           ),
           Positioned(
-            bottom: 36, left: 24, right: 24,
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryBlue,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                ),
-                onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeShellScreen())),
-                child: const Text('Get Started', style: AppFonts.buttonText),
-              ),
+            bottom: 100,
+            right: 20,
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: AppColors.white,
+              onPressed: () => _mapController.move(_selectedPoint, 14),
+              child: const Icon(Icons.my_location, color: AppColors.primaryBlue),
             ),
+          ),
+          Positioned(
+            bottom: 36,
+            left: 24,
+            right: 24,
+            child: PrimaryButton(text: 'Get Started', onPressed: _onGetStarted),
           ),
         ],
       ),
